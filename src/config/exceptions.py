@@ -1,0 +1,6 @@
+class EnvException(Exception):
+    ...
+
+
+class EnvDependNotFound(EnvException):
+    ...

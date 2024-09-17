@@ -1,0 +1,21 @@
+[tool.poetry]
+name = "StealthFlowVPN Telegram bot"
+version = "0.1.0"
+description = ""
+authors = ["Nikita Shagalov <shagalovprog@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiogram = "^3.13.0"
+dependency-injector = "^4.42.0"
+sqlalchemy = "^2.0.34"
+alembic = "^1.13.2"
+asyncpg = "^0.29.0"
+mypy = "^1.11.2"
+python-dotenv = "^1.0.1"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
