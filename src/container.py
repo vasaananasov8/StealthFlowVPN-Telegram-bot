@@ -10,6 +10,7 @@ from src.services.storage.repository.Implementation.subscription_repository impo
 from src.services.storage.repository.Implementation.user_repository import PostgresUserRepository
 from src.services.storage.repository.engine import get_engine
 from src.services.xui.requests.request_handler import RequestHandler
+from src.services.xui.xui_manager import VpnManager
 
 
 class AppContainer(containers.DeclarativeContainer):
@@ -44,7 +45,14 @@ class AppContainer(containers.DeclarativeContainer):
         engine=engine
     )
 
+    # Handler to make api requests
     request_handler = providers.Singleton(
         RequestHandler,
         config=app_config
+    )
+
+    # Handler to interact with xui service
+    vpn_handler = providers.Singleton(
+        VpnManager,
+        request_handler=request_handler
     )
