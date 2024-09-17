@@ -25,6 +25,7 @@ class Config:
         self.XUI_PASSWORD: Final[str] = self.get_env_var("XUI_PASSWORD")
         self.XUI_HOST: Final[str] = self.get_env_var("XUI_HOST")
         self.XUI_PORT: Final[str] = self.get_env_var("XUI_PORT")
+        self.XUI_SECRET: Final[str] = self.get_env_var("XUI_SECRET")
 
     @staticmethod
     def get_env_var(var_name: str, default_value: Any = None) -> Any:
@@ -52,4 +53,4 @@ class Config:
 
     @property
     def xui_host(self) -> str:
-        return f"{self.XUI_HOST}:{self.XUI_PORT}"
+        return f"https://{self.XUI_HOST}:{self.XUI_PORT}/{self.XUI_SECRET}"

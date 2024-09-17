@@ -9,6 +9,7 @@ from src.services.storage.repository.Implementation.payment_repository import Po
 from src.services.storage.repository.Implementation.subscription_repository import PostgresSubscriptionRepository
 from src.services.storage.repository.Implementation.user_repository import PostgresUserRepository
 from src.services.storage.repository.engine import get_engine
+from src.services.xui.requests.request_handler import RequestHandler
 
 
 class AppContainer(containers.DeclarativeContainer):
@@ -43,19 +44,7 @@ class AppContainer(containers.DeclarativeContainer):
         engine=engine
     )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    request_handler = providers.Singleton(
+        RequestHandler,
+        config=app_config
+    )
