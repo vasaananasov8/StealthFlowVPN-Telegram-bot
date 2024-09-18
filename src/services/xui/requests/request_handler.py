@@ -33,11 +33,21 @@ class RequestHandler(IRequestHandler):
     async def check_response(r: ClientResponse) -> bool:
         r = await r.text()
         try:
-            body = json.loads(r)
+            json.loads(r)
         except JSONDecodeError:
             # raise BadResponseException(f"Expected json instead: {body=}") # TODO: add to logging
             return False
-        return body.get("success", False)
+        else:
+            return True
+
+    @staticmethod
+    async def check_login_response(r: ClientResponse) -> bool:
+        r = await r.text()
+        try:
+            body = json.loads(r)
+        except JSONDecodeError:
+            return False
+        return not (body.get("msg", "").strip() == "Invalid username or password or secret")
 
     @property
     def _cookies(self) -> SimpleCookie:
@@ -58,7 +68,7 @@ class RequestHandler(IRequestHandler):
                         f"username={self.config.xui_login}&password={self.config.xui_password}",
                     ssl=self.ssl_context
             ) as r:
-                if await self.check_response(r):
+                if await self.check_login_response(r):
                     cookies = r.cookies
                     cookies = cookies["3x-ui"]
                     self.session_id = cookies.value
@@ -92,7 +102,6 @@ class RequestHandler(IRequestHandler):
     async def post(self, url: str, body: dict | None = None, _counter: int = 0) -> ResponseModel:
         if not self.session_id:
             await self._login()
-
         async with aiohttp.ClientSession() as session:
             async with session.post(
                     url=f"{self.config.xui_host}/{url}",
