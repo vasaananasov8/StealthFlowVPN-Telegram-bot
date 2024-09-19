@@ -12,5 +12,5 @@ alembic revision --autogenerate -m 'initial'
 ```
 5. Проверьте корректность миграции и примените ее (модели таблиц лежат по пути `src/services/storage/schemas`)
 ```commandline
-alembic revision -m 'initial'
+alembic upgrade head
 ```
