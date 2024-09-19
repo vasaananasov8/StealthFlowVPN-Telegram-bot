@@ -1,11 +1,9 @@
 import asyncio
-from uuid import uuid4
 
 from aiogram import Router, types
 from aiogram.filters import Command
 
 from src.container import AppContainer
-from src.services.storage.schemas.connection import Connection
 
 
 async def main():

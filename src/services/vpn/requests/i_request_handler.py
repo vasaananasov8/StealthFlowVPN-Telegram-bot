@@ -1,5 +1,5 @@
 from abc import ABC, abstractmethod
-
+from http.cookies import SimpleCookie
 
 from pydantic import BaseModel
 
@@ -7,6 +7,7 @@ from pydantic import BaseModel
 class ResponseModel(BaseModel):
     body: str
     status: int
+    cookies: dict
 
 
 class IRequestHandler(ABC):
@@ -19,14 +20,4 @@ class IRequestHandler(ABC):
     @abstractmethod
     async def post(self, url: str, body: dict) -> ResponseModel:
         """POST request"""
-        ...
-
-    @abstractmethod
-    async def patch(self, url: str, body: dict) -> ResponseModel:
-        """PATCH request"""
-        ...
-
-    @abstractmethod
-    async def delete(self, url: str, body: dict) -> ResponseModel:
-        """DELETE request"""
         ...

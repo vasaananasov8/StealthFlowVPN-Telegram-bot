@@ -5,11 +5,13 @@ from dependency_injector import containers, providers
 
 from src.bot.bot import TgBot
 from src.config.config import Config
-from src.services.storage.repository.Implementation.connection_repository import PostgresConnectionRepository
-from src.services.storage.repository.Implementation.payment_repository import PostgresPaymentRepository
-from src.services.storage.repository.Implementation.subscription_repository import PostgresSubscriptionRepository
-from src.services.storage.repository.Implementation.user_repository import PostgresUserRepository
+from src.services.storage.repository.implementation.connection_repository import PostgresConnectionRepository
+from src.services.storage.repository.implementation.payment_repository import PostgresPaymentRepository
+from src.services.storage.repository.implementation.subscription_repository import PostgresSubscriptionRepository
+from src.services.storage.repository.implementation.user_repository import PostgresUserRepository
 from src.services.storage.repository.engine import get_engine
+from src.services.vpn.requests.request_handler import RequestHandler
+from src.services.vpn.vpn_manager import VpnManager
 
 
 class AppContainer(containers.DeclarativeContainer):
@@ -49,19 +51,15 @@ class AppContainer(containers.DeclarativeContainer):
         engine=engine
     )
 
+    # Handler to make api requests
+    request_handler = providers.Singleton(
+        RequestHandler,
+        config=app_config
+    )
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    # Handler to interact with vpn service
+    vpn_handler = providers.Singleton(
+        VpnManager,
+        request_handler=request_handler,
+        config=app_config
+    )

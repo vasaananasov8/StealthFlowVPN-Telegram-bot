@@ -1,0 +1,9 @@
+class RequestException(Exception):
+    """Base exception for requests"""
+    ...
+
+class BadResponseException(RequestException):
+    ...
+
+class LoginRecursionException(RequestException):
+    ...
