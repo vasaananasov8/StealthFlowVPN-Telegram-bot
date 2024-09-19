@@ -2,7 +2,7 @@
 name = "StealthFlowVPN Telegram bot"
 version = "0.1.0"
 description = ""
-authors = ["Nikita Shagalov <shagalovprog@gmail.com>"]
+authors = ["Nikita Shagalov <shagalovprog@gmail.com>", 'Dmitrii Kovalenko <dshinoda25@gmail.com>']
 readme = "README.md"
 
 [tool.poetry.dependencies]
