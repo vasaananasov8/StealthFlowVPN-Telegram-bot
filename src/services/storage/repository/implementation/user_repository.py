@@ -13,10 +13,6 @@ logger = logging.getLogger(__name__)
 
 
 class PostgresUserRepository(IPostgresUserRepository):
-
-    def __init__(self, engine: AsyncEngine) -> None:
-        super().__init__(engine)
-
     async def get_user(self, _id: int) -> dict:
         """
         Get user from database
