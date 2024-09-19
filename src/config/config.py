@@ -11,21 +11,23 @@ class Config:
         dotenv.load_dotenv()
 
         # Telegram
-        self.BOT_TOKEN: Final[str] = self.get_env_var("BOT_TOKEN")
+        self._BOT_TOKEN: Final[str] = self.get_env_var("BOT_TOKEN")
 
         # Database
-        self.DB_HOST: Final[str] = self.get_env_var("DB_HOST")
-        self.DB_PORT: Final[int] = self.get_env_var("DB_PORT")
-        self.DB_USER: Final[str] = self.get_env_var("DB_USER")
-        self.DB_PASSWORD: Final[str] = self.get_env_var("DB_PASSWORD")
-        self.DB_NAME: Final[str] = self.get_env_var("DB_NAME")
+        self._DB_HOST: Final[str] = self.get_env_var("DB_HOST")
+        self._DB_PORT: Final[int] = self.get_env_var("DB_PORT")
+        self._DB_USER: Final[str] = self.get_env_var("DB_USER")
+        self._DB_PASSWORD: Final[str] = self.get_env_var("DB_PASSWORD")
+        self._DB_NAME: Final[str] = self.get_env_var("DB_NAME")
 
-        # Xui service
-        self.XUI_LOGIN: Final[str] = self.get_env_var("XUI_LOGIN")
-        self.XUI_PASSWORD: Final[str] = self.get_env_var("XUI_PASSWORD")
-        self.XUI_HOST: Final[str] = self.get_env_var("XUI_HOST")
-        self.XUI_PORT: Final[str] = self.get_env_var("XUI_PORT")
-        self.XUI_SECRET: Final[str] = self.get_env_var("XUI_SECRET")
+        # Vpn service
+        self._VPN_LOGIN: Final[str] = self.get_env_var("VPN_LOGIN")
+        self._VPN_PASSWORD: Final[str] = self.get_env_var("VPN_PASSWORD")
+        self._VPN_HOST: Final[str] = self.get_env_var("VPN_HOST")
+        self._VPN_PORT: Final[str] = self.get_env_var("VPN_PORT")
+        self._VPN_SECRET: Final[str] = self.get_env_var("VPN_SECRET")
+        self._VPN_PBK: Final[str] = self.get_env_var("VPN_PBK")
+        self._VPN_SID: Final[str] = self.get_env_var("VPN_SID")
 
     @staticmethod
     def get_env_var(var_name: str, default_value: Any = None) -> Any:
@@ -37,20 +39,32 @@ class Config:
 
     @property
     def db_url(self) -> str:
-        return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASSWORD}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
+        return f"postgresql+asyncpg://{self._DB_USER}:{self._DB_PASSWORD}@{self._DB_HOST}:{self._DB_PORT}/{self._DB_NAME}"
 
     @property
     def bot_token(self) -> str:
-        return self.BOT_TOKEN
+        return self._BOT_TOKEN
 
     @property
-    def xui_login(self) -> str:
-        return self.XUI_LOGIN
+    def vpn_login(self) -> str:
+        return self._VPN_LOGIN
 
     @property
-    def xui_password(self) -> str:
-        return self.XUI_PASSWORD
+    def vpn_password(self) -> str:
+        return self._VPN_PASSWORD
 
     @property
-    def xui_host(self) -> str:
-        return f"https://{self.XUI_HOST}:{self.XUI_PORT}/{self.XUI_SECRET}"
+    def vpn_host_with_secret_str(self) -> str:
+        return f"https://{self._VPN_HOST}:{self._VPN_PORT}/{self._VPN_SECRET}"
+
+    @property
+    def vpn_host(self) -> str:
+        return self._VPN_HOST
+
+    @property
+    def vpn_pbk(self) -> str:
+        return self._VPN_PBK
+
+    @property
+    def vpn_sid(self) -> str:
+        return self._VPN_SID

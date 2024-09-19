@@ -7,9 +7,9 @@ from json import JSONDecodeError
 from aiohttp import ClientResponse
 
 from src.config.config import Config
-from src.services.xui.requests.exceptions import BadResponseException, LoginRecursionException
-from src.services.xui.requests.i_request_handler import IRequestHandler, ResponseModel
-from src.services.xui.requests.statuses import SUCCESS_200
+from src.services.vpn.requests.exceptions import BadResponseException, LoginRecursionException
+from src.services.vpn.requests.i_request_handler import IRequestHandler, ResponseModel
+from src.services.vpn.requests.statuses import SUCCESS_200
 
 
 class RequestHandler(IRequestHandler):
@@ -64,8 +64,8 @@ class RequestHandler(IRequestHandler):
         # Make request
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                    url=f"{self.config.xui_host}/login?"
-                        f"username={self.config.xui_login}&password={self.config.xui_password}",
+                    url=f"{self.config.vpn_host_with_secret_str}/login?"
+                        f"username={self.config.vpn_login}&password={self.config.vpn_password}",
                     ssl=self.ssl_context
             ) as r:
                 if await self.check_login_response(r):
@@ -82,7 +82,7 @@ class RequestHandler(IRequestHandler):
 
         async with aiohttp.ClientSession() as session:
             async with session.get(
-                    url=f"{self.config.xui_host}/{url}",
+                    url=f"{self.config.vpn_host_with_secret_str}/{url}",
                     ssl=self.ssl_context,
                     cookies=self._cookies
             ) as r:
@@ -104,7 +104,7 @@ class RequestHandler(IRequestHandler):
             await self._login()
         async with aiohttp.ClientSession() as session:
             async with session.post(
-                    url=f"{self.config.xui_host}/{url}",
+                    url=f"{self.config.vpn_host_with_secret_str}/{url}",
                     data=body,
                     ssl=self.ssl_context,
                     cookies=self._cookies

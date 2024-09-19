@@ -2,7 +2,7 @@ import uuid
 from abc import ABC, abstractmethod
 
 from src.config.config import Config
-from src.services.xui.requests.request_handler import RequestHandler
+from src.services.vpn.requests.request_handler import RequestHandler
 
 
 class IVpnManager(ABC):
@@ -18,18 +18,14 @@ class IVpnManager(ABC):
             inbound_id: int = 1,
             total_gb: int = 0,
             duration_mouth: int = 1
-    ) -> bool:
+    ) -> None:
         """
         Create new client connection in 3x service
-        :param user_email:
-        :param connection_id:
+        :param user_email: some unic str to indelicate client connection
+        :param connection_id: uuid of current connection
         :param inbound_id:
-        :param total_gb:
+        :param total_gb: gb limit of connection
         :param duration_mouth:
-        :return:
+        :raise: CreateVpnClientException if client not created
         """
         ...
-
-    # @abstractmethod
-    # def generate_client_qr(self) -> bytes:
-    #     ...
