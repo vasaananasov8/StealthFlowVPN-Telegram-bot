@@ -11,12 +11,20 @@ class ISubscriptionRepository(ABC):
     async def get_user_subscription(self, user_id: int) -> dict[str, Any]:
         """
         Get user subscription from db
-        :param user_id:  user telegram id
+        :param:  user telegram id
+        :return: dict
+        :raise: RepositorySubscriptionNotFound, RepositoryException
         """
         ...
 
     @abstractmethod
     async def create_subscription(self, subscription: Subscription) -> None:
+        """
+        Create subscription in db
+        :param: Subscription
+        :return: None
+        :raise: RepositorySubscriptionCreationError, RepositoryException
+        """
         ...
 
 

@@ -9,11 +9,21 @@ class IConnectionRepository(ABC):
     """Interface to interact with connectin database"""
     @abstractmethod
     async def get_all_user_connections(self, user_id: int) -> list[dict[str, Any]]:
+        """
+        :param user_id:  user telegram id
+        :return: list of connections
+        :raise: RepositoryException
+        """
 
         ...
 
     @abstractmethod
     async def create_connection(self, connection: Connection) -> None:
+        """
+        :param connection:  connection
+        :return: None
+        :raise: RepositoryException
+        """
         ...
 
 

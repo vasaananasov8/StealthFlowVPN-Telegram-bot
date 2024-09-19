@@ -3,7 +3,7 @@ class RepositoryException(Exception):
 
 
 class RepositoryUserNotFound(RepositoryException):
-    """Исключение, которое возникает, когда пользователь не найден."""
+    """An exception that occurs when the user is not found."""
 
     def __init__(self, user_id: int):
         self.user_id = user_id
@@ -11,17 +11,17 @@ class RepositoryUserNotFound(RepositoryException):
 
 
 class RepositoryUserCreationError(RepositoryException):
-    """Исключение для ошибок при создании пользователя"""
+    """Exception for errors when creating a user"""
     ...
 
 
 class RepositorySubscriptionCreationError(RepositoryException):
-    """Исключение для ошибок при создании подписки"""
+    """Exception for errors when creating a subscription"""
     ...
 
 
 class RepositorySubscriptionNotFound(RepositoryException):
-    """Исключение, которое возникает, когда подписка не найдена."""
+    """An exception that occurs when a subscription is not found."""
 
     def __init__(self, subscription_id: int):
         self.subscription_id = subscription_id
@@ -29,5 +29,13 @@ class RepositorySubscriptionNotFound(RepositoryException):
 
 
 class RepositoryConnectionCreationError(RepositoryException):
-    """Исключение для ошибок при создании подключения"""
+    """Exception for errors when creating a connection"""
     ...
+
+
+class RepositoryConnectionNotFound(RepositoryException):
+    """An exception that occurs when the connection is not found."""
+
+    def __init__(self, connection_id: int):
+        self.connection_id = connection_id
+        super().__init__(f'Connection with ID {self.connection_id} not found.')

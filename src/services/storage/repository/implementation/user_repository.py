@@ -14,12 +14,6 @@ logger = logging.getLogger(__name__)
 
 class PostgresUserRepository(IPostgresUserRepository):
     async def get_user(self, _id: int) -> dict:
-        """
-        Get user from database
-        :param _id: int
-        :return: dict
-        :raise: RepositoryUserNotFound, RepositoryException
-        """
         async with self.async_session() as session:
             try:
                 result = await session.execute(
@@ -44,12 +38,6 @@ class PostgresUserRepository(IPostgresUserRepository):
                 raise RepositoryException(f'Error occurred while fetching user with ID {_id}')
 
     async def create_user(self, user: User) -> None:
-        """
-        Create user in database
-        :param user: User
-        :return: None
-        :raise: RepositoryUserCreationError, RepositoryException
-        """
         try:
             async with self.async_session() as session:
                 async with session.begin():
