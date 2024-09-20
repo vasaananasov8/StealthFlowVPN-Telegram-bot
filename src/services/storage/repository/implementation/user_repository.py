@@ -1,11 +1,11 @@
 import logging
 
 from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlalchemy.exc import SQLAlchemyError, NoResultFound
+from sqlalchemy.exc import SQLAlchemyError, NoResultFound, IntegrityError
 from sqlalchemy.future import select
 
 from src.services.storage.repository.exceptions import RepositoryUserNotFound, RepositoryException, \
-    RepositoryUserCreationError
+    RepositoryUserCreationError, RepositoryAlreadyExist
 from src.services.storage.repository.interfaces.i_user_repository import IPostgresUserRepository
 from src.services.storage.schemas.user import User
 
@@ -42,6 +42,9 @@ class PostgresUserRepository(IPostgresUserRepository):
             async with self.async_session() as session:
                 async with session.begin():
                     session.add(user)
+        except IntegrityError:
+            logger.info(f"User {user.id} already exist")
+            raise RepositoryAlreadyExist(f"User {user.id} already exist")
         except SQLAlchemyError as e:
             logger.info(f'Error occurred while creating user with ID {user.id}: {e}')
             raise RepositoryUserCreationError(f'Error occurred while creating user with ID {user.id}: {e}')
