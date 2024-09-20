@@ -5,7 +5,7 @@ from src.config.config import Config
 from src.services.vpn.requests.request_handler import RequestHandler
 
 
-class IVpnManager(ABC):
+class IVpnRepository(ABC):
     def __init__(self, request_handler: RequestHandler, config: Config) -> None:
         self.request_handler = request_handler
         self.config = config

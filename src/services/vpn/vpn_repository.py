@@ -7,12 +7,12 @@ from typing import Any
 from dateutil.relativedelta import relativedelta
 
 from src.services.vpn.exceptions import CreateVpnClientException
-from src.services.vpn.i_vpn_manager import IVpnManager
+from src.services.vpn.i_vpn_repository import IVpnRepository
 from src.services.vpn.requests import statuses
 from src.services.vpn.requests.request_handler import RequestHandler
 
 
-class VpnManager(IVpnManager):
+class VpnRepository(IVpnRepository):
 
     async def add_client(
             self,
