@@ -11,6 +11,7 @@ from src.services.storage.schemas.payment import Payment  # noqa
 from src.services.storage.schemas.subscription import Subscription  # noqa
 from src.services.storage.schemas.user import User  # noqa
 from src.services.storage.schemas.connection import Connection   # noqa
+from src.services.storage.schemas.promo import Promo   # noqa
 
 from src.services.storage.schemas.meta import Base
 
