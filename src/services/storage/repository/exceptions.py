@@ -39,3 +39,7 @@ class RepositoryConnectionNotFound(RepositoryException):
     def __init__(self, connection_id: int):
         self.connection_id = connection_id
         super().__init__(f'Connection with ID {self.connection_id} not found.')
+
+
+class RepositoryAlreadyExist(RepositoryException):
+    ...
