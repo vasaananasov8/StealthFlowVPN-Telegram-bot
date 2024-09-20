@@ -33,7 +33,7 @@ class PostgresSubscriptionRepository(IPostgresSubscriptionRepository):
                         'is_active': subscription.is_active
                     }
             except NoResultFound:
-                logger.error(f'No result found for subscription with ID {user_id}.')
+                logger.info(f'No result found for subscription with ID {user_id}.')
                 raise RepositorySubscriptionNotFound(user_id)
             except Exception as e:
                 logger.error(f'Error occurred while fetching subscription with ID {user_id}')
@@ -78,7 +78,7 @@ class PostgresSubscriptionRepository(IPostgresSubscriptionRepository):
                             'is_active': updated_subscription.is_active
                         }
                 except NoResultFound:
-                    logger.error(f'No result found for subscription with ID {subscription_id}.')
+                    logger.info(f'No result found for subscription with ID {subscription_id}.')
                     raise RepositorySubscriptionNotFound(subscription_id)
                 except Exception as e:
                     raise RepositoryException(

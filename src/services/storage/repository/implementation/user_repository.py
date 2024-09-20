@@ -31,7 +31,7 @@ class PostgresUserRepository(IPostgresUserRepository):
                         'timezone': user.timezone
                     }
             except NoResultFound:
-                logger.error(f'No result found for user with ID {_id}.')
+                logger.info(f'No result found for user with ID {_id}.')
                 raise RepositoryUserNotFound(_id)
             except Exception as e:
                 logger.error(f'Error occurred while fetching user with ID {_id}')
@@ -43,7 +43,7 @@ class PostgresUserRepository(IPostgresUserRepository):
                 async with session.begin():
                     session.add(user)
         except SQLAlchemyError as e:
-            logger.error(f'Error occurred while creating user with ID {user.id}: {e}')
+            logger.info(f'Error occurred while creating user with ID {user.id}: {e}')
             raise RepositoryUserCreationError(f'Error occurred while creating user with ID {user.id}: {e}')
         except Exception as e:
             logger.error(f'Unexpected error occurred while creating user with ID {user.id}: {e}')
