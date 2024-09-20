@@ -4,7 +4,10 @@ from aiogram.enums import ParseMode
 from dependency_injector import containers, providers
 
 from src.bot.bot import TgBot
+from src.bot.ui.scripts import Scripts
 from src.config.config import Config
+from src.services.storage.infrastructure.implementation.subscription_storage_manager import SubscriptionStorageManager
+from src.services.storage.infrastructure.implementation.user_storage_manager import UserStorageManager
 from src.services.storage.repository.implementation.connection_repository import PostgresConnectionRepository
 from src.services.storage.repository.implementation.payment_repository import PostgresPaymentRepository
 from src.services.storage.repository.implementation.subscription_repository import PostgresSubscriptionRepository
@@ -16,6 +19,7 @@ from src.services.vpn.vpn_manager import VpnManager
 
 class AppContainer(containers.DeclarativeContainer):
     app_config = providers.Singleton(Config)
+    handler_scripts = providers.Singleton(Scripts)
 
     bot = providers.Singleton(
         TgBot,
@@ -28,7 +32,7 @@ class AppContainer(containers.DeclarativeContainer):
     # engine to repositories
     engine = providers.Singleton(
         get_engine,
-        app_config
+        config=app_config
     )
 
     user_repository = providers.Singleton(
@@ -62,4 +66,15 @@ class AppContainer(containers.DeclarativeContainer):
         VpnManager,
         request_handler=request_handler,
         config=app_config
+    )
+
+    # Storage managers
+    user_storage_manager = providers.Singleton(
+        UserStorageManager,
+        user_repository=user_repository
+    )
+
+    subscription_storage_manager = providers.Singleton(
+        SubscriptionStorageManager,
+        subscription_repository=subscription_repository
     )

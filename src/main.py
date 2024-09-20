@@ -1,59 +1,17 @@
 import asyncio
 
-from aiogram import Router, types
-from aiogram.filters import Command
-
 from src.container import AppContainer
+from src.bot.routers.main_router import get_main_router
 
 
 async def main():
-
     container = AppContainer()
-    container.wire(modules=[__name__])
-
-    # Test tg router
-    router = Router(name=__name__)
-
-    @router.message(Command("statr"))
-    async def create_account(
-            message: types.Message,
-    ) -> None:
-        """"""
-        await message.answer(text="hello")
-        print(
-            message.from_user
-        )
+    container.wire(packages=["src.bot"])
 
     dp = container.bot_dispatcher()
-    dp.include_router(router)
+    dp.include_router(get_main_router())
     await dp.start_polling(container.bot())
 
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

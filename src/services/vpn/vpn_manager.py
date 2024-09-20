@@ -45,7 +45,9 @@ class VpnManager(IVpnManager):
     ) -> str | None:
         """Create client with 3x api and return connection string to created connection"""
         await self.add_client(connection_id, user_email, inbound_id, total_gb, duration_mouth)
-        return self.create_connection_link(connection_id, user_email)
+        x = self.create_connection_link(connection_id, user_email)
+        print(x)
+        return x
 
     @staticmethod
     def create_add_client_body(

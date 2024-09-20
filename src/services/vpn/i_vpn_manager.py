@@ -29,3 +29,14 @@ class IVpnManager(ABC):
         :raise: CreateVpnClientException if client not created
         """
         ...
+
+    @abstractmethod
+    async def add_client_with_connection_string(
+            self,
+            connection_id: uuid.UUID,
+            user_email: str,
+            inbound_id: int = 1,
+            total_gb: int = 0,
+            duration_mouth: int = 1
+    ) -> str | None:
+        ...
