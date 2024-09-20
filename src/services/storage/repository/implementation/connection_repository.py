@@ -27,10 +27,7 @@ class PostgresConnectionRepository(IPostgresConnectionRepository):
                     raise RepositoryUserNotFound(user_id)
 
                 connections_list = [
-                    {
-                        'id': connection.id,
-                        'user_id': connection.user_id,
-                    }
+                    connection.id
                     for connection in connections
                 ]
 
