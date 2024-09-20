@@ -14,3 +14,8 @@ def get_vpm_meny() -> InlineKeyboardBuilder:
     # builder.button(text="Оплатить", callback_data=callbacks.PAY)
     builder.button(text="Ввести промокод", callback_data=callbacks.USER_PROMO)
     return builder
+
+def cancel() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Отмена", callback_data=callbacks.CANCEL)
+    return builder
