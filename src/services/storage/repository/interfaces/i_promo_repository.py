@@ -19,6 +19,10 @@ class IPromoRepository(ABC):
     async def create_promos(self, promo: Promo) -> None:
         ...
 
+    @abstractmethod
+    async def change_promo_activity(self, _id: str, new_value: bool) -> None:
+        ...
+
 
 class IPostgresPromoRepository(IPostgresInit, IPromoRepository, ABC):
     """

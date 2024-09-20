@@ -14,3 +14,6 @@ class PostgresPromoRepository(IPostgresPromoRepository):
 
     async def create_promos(self, promos: list[Promo]) -> None:
         ...
+
+    async def change_promo_activity(self, _id: str, new_value: bool) -> None:
+        ...
