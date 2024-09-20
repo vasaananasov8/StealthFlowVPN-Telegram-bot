@@ -6,7 +6,7 @@ from dependency_injector import containers, providers
 from src.bot.bot import TgBot
 from src.bot.ui.scripts import Scripts
 from src.config.config import Config
-from src.services.storage.infrastructure.implementation.pormo_storage_manager import PromoManager
+from src.services.storage.infrastructure.implementation.pormo_manager import PromoManager
 from src.services.storage.infrastructure.implementation.subscription_storage_manager import SubscriptionStorageManager
 from src.services.storage.infrastructure.implementation.user_storage_manager import UserStorageManager
 from src.services.storage.repository.implementation.connection_repository import PostgresConnectionRepository
@@ -16,6 +16,7 @@ from src.services.storage.repository.implementation.user_repository import Postg
 from src.services.storage.repository.implementation.promo_repository import PostgresPromoRepository
 from src.services.storage.repository.engine import get_engine
 from src.services.vpn.requests.request_handler import RequestHandler
+from src.services.vpn.vpn_manager import VpnManager
 from src.services.vpn.vpn_repository import VpnRepository
 
 
@@ -89,4 +90,10 @@ class AppContainer(containers.DeclarativeContainer):
     promo_manager = providers.Singleton(
         PromoManager,
         promo_repository=promo_repository
+    )
+
+    vpn_manager = providers.Singleton(
+        VpnManager,
+        subscription_manager=subscription_storage_manager,
+        vpn_repository=vpn_repository
     )
