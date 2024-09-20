@@ -1,7 +1,11 @@
 import asyncio
+import logging
 
 from src.container import AppContainer
 from src.bot.routers.main_router import get_main_router
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 async def main():

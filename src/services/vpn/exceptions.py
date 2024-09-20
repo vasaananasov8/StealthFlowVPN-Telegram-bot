@@ -1,5 +1,6 @@
 class VpnException(Exception):
     ...
 
+
 class CreateVpnClientException(VpnException):
     ...
