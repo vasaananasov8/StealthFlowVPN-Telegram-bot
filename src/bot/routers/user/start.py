@@ -41,21 +41,3 @@ async def start(
             text=handler_scripts.start_script,
             reply_markup=main_menu_kb().as_markup()
         )
-        await msg.delete()
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
