@@ -16,7 +16,7 @@ class IPromoRepository(ABC):
         ...
 
     @abstractmethod
-    async def create(self, promo: Promo) -> None:
+    async def create_promos(self, promo: Promo) -> None:
         ...
 
 

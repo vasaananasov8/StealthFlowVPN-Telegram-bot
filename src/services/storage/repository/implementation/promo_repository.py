@@ -12,5 +12,5 @@ class PostgresPromoRepository(IPostgresPromoRepository):
     async def get_all_active_promo(self) -> list[dict[str, Any]]:
         ...
 
-    async def create(self, promo: Promo) -> None:
+    async def create_promos(self, promos: list[Promo]) -> None:
         ...
