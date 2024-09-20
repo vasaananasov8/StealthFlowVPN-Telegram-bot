@@ -5,7 +5,7 @@ from src.services.storage.repository.interfaces.i_promo_repository import IPostg
 from src.services.storage.schemas.promo import Promo
 
 
-class PromoRepository(IPostgresPromoRepository):
+class PostgresPromoRepository(IPostgresPromoRepository):
     async def get_promo(self, _id: uuid.UUID) -> dict[str, Any]:
         ...
 

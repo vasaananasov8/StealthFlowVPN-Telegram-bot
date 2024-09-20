@@ -12,6 +12,7 @@ from src.services.storage.repository.implementation.connection_repository import
 from src.services.storage.repository.implementation.payment_repository import PostgresPaymentRepository
 from src.services.storage.repository.implementation.subscription_repository import PostgresSubscriptionRepository
 from src.services.storage.repository.implementation.user_repository import PostgresUserRepository
+from src.services.storage.repository.implementation.promo_repository import PostgresPromoRepository
 from src.services.storage.repository.engine import get_engine
 from src.services.vpn.requests.request_handler import RequestHandler
 from src.services.vpn.vpn_manager import VpnManager
@@ -55,6 +56,11 @@ class AppContainer(containers.DeclarativeContainer):
         engine=engine
     )
 
+    promo_repository = providers.Singleton(
+        PostgresPromoRepository,
+        engine=engine
+    )
+
     # Handler to make api requests
     request_handler = providers.Singleton(
         RequestHandler,
@@ -78,3 +84,4 @@ class AppContainer(containers.DeclarativeContainer):
         SubscriptionStorageManager,
         subscription_repository=subscription_repository
     )
+
