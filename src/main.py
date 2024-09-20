@@ -1,13 +1,16 @@
 import asyncio
+import logging
 
 from aiogram import Router, types
 from aiogram.filters import Command
 
 from src.container import AppContainer
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 async def main():
-
     container = AppContainer()
     container.wire(modules=[__name__])
 
@@ -31,29 +34,3 @@ async def main():
 
 if __name__ == '__main__':
     asyncio.run(main())
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
