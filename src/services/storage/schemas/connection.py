@@ -10,3 +10,4 @@ class Connection(Base):
     __tablename__ = "connections"
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"))
+    link: Mapped[str] = mapped_column(nullable=False, unique=True)
