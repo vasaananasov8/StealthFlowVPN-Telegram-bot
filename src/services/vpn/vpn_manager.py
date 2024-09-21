@@ -4,6 +4,7 @@ from typing import Any
 
 from charset_normalizer.md import getLogger
 
+from src.core.models.connection import Connection
 from src.core.models.promo import Promo
 from src.core.models.subscription import Subscription
 from src.services.storage.infrastructure.interfaces.i_promo_manager import IPromoManager
@@ -25,9 +26,16 @@ class VpnManager(IVpnManager):
             self, subscription: Subscription,
             user_id: int, username: str, connection_number: int
     ) -> str:
+        connection_id = uuid.uuid4()
         await self._subscription_manager.create_subscription(subscription)
+        await self._connection_manager.add_new_connection(
+            Connection(
+                id=connection_id,
+                user_id=user_id
+            )
+        )
         return await self._vpn_repository.add_client_with_connection_string(
-            connection_id=uuid.uuid4(),
+            connection_id=connection_id,
             user_email=self.create_user_email_for_vpn(user_id, username, connection_number)
         )
 
