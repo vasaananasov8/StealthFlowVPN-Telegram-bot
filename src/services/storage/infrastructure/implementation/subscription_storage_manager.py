@@ -6,7 +6,7 @@ from pydantic import ValidationError
 from src.core.models.subscription import Subscription
 from src.services.storage.exception import StorageManagerValidationError
 from src.services.storage.infrastructure.interfaces.i_subscription_manager import ISubscriptionStorageManager
-from src.services.storage.repository.exceptions import RepositorySubscriptionNotFound, RepositoryAlreadyExist
+from src.services.storage.repository.exceptions import RepositorySubscriptionNotFound
 
 logger = getLogger(__name__)
 

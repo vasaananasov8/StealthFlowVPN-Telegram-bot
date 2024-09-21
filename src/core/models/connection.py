@@ -6,9 +6,11 @@ from src.services.storage.schemas.connection import Connection as DbConnection
 class Connection(BaseModel):
     id: uuid.UUID
     user_id: int
+    link: str
 
     def get_db_connection_model(self) -> DbConnection:
         return DbConnection(
             id=self.id,
-            user_id=self.user_id
+            user_id=self.user_id,
+            link=self.link
         )

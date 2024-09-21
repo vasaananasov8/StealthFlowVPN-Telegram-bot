@@ -28,16 +28,18 @@ class VpnManager(IVpnManager):
     ) -> str:
         connection_id = uuid.uuid4()
         await self._subscription_manager.create_subscription(subscription)
-        await self._connection_manager.add_new_connection(
-            Connection(
-                id=connection_id,
-                user_id=user_id
-            )
-        )
-        return await self._vpn_repository.add_client_with_connection_string(
+        connection_link = await self._vpn_repository.add_client_with_connection_string(
             connection_id=connection_id,
             user_email=self.create_user_email_for_vpn(user_id, username, connection_number)
         )
+        await self._connection_manager.add_new_connection(
+            Connection(
+                id=connection_id,
+                user_id=user_id,
+                link=connection_link
+            )
+        )
+        return connection_link
 
     async def extend_subscription(self) -> bool:
         pass

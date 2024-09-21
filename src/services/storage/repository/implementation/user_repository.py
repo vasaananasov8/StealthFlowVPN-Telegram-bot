@@ -1,12 +1,10 @@
 import logging
 
-from sqlalchemy.ext.asyncio import AsyncEngine
-from sqlalchemy.exc import SQLAlchemyError, NoResultFound, IntegrityError
 from sqlalchemy.future import select
 
-from src.services.storage.repository.exceptions import (RepositoryUserNotFound, RepositoryException, \
-    RepositoryUserCreationError, handle_db_exception
-    RepositoryUserCreationError, RepositoryAlreadyExist)
+from src.services.storage.repository.exceptions import (RepositoryUserNotFound,
+                                                        handle_db_exception,
+                                                        RepositoryUserCreationError)
 from src.services.storage.repository.interfaces.i_user_repository import IPostgresUserRepository
 from src.services.storage.schemas.user import User
 

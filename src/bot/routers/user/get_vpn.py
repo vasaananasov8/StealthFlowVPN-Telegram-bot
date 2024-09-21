@@ -50,6 +50,7 @@ async def set_promo(
         vpn_manager: IVpnManager = Provide[AppContainer.vpn_manager]
 ) -> None:
     """Set promo to user"""
+    scripts_handler.set_language(msg.from_user.language_code)
     promo_id = msg.text.strip()
     promo_check_result = await promo_manager.check_promo_is_valid(promo_id)
     match promo_check_result.result:
