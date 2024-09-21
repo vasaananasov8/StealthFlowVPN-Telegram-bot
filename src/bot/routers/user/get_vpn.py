@@ -5,20 +5,20 @@ from aiogram.utils.keyboard import InlineKeyboardBuilder
 from dependency_injector.wiring import inject, Provide
 
 from src.bot.routers.fsm import UsePromo
-from src.bot.routers.utils import send_error_message
+from src.bot.routers.utils import send_error_message, handel_unexpected_exception
 from src.bot.ui.inline_keyboard import callbacks
 from src.bot.ui.inline_keyboard import keyboard
-from src.bot.ui.scripts import Scripts
+from src.bot.ui.scripts.scripts import Scripts
 from src.container import AppContainer
 from src.services.storage.infrastructure.interfaces.i_promo_manager import IPromoManager, PromoCheckValue
-from src.services.vpn.i_vpn_manager import IVpnManager, ApplyPromoResultValues, ApplyPromoResult
+from src.services.vpn.i_vpn_manager import IVpnManager, ApplyPromoResultValues
 
 logger = getLogger(__name__)
 router = Router(name=__name__)
 
 
 @router.callback_query(lambda x: x.data == callbacks.GET_VPN)
-# @handel_unexpected_exception
+@handel_unexpected_exception
 @inject
 async def get_vpn(
         callback: types.CallbackQuery | None = None,

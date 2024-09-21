@@ -6,7 +6,7 @@ from sqlalchemy.exc import IntegrityError
 
 from src.bot.ui.inline_keyboard import callbacks
 from src.bot.ui.inline_keyboard.keyboard import main_menu_kb
-from src.bot.ui.scripts import Scripts
+from src.bot.ui.scripts.scripts import Scripts, IScripts
 from src.container import AppContainer
 from src.core.models.user import User
 from src.services.storage.infrastructure.interfaces.i_user_storage_manager import IUserStorageManager
@@ -21,8 +21,10 @@ router = Router(name=__name__)
 async def start(
         msg: types.Message,
         user_storage_manager: IUserStorageManager = Provide[AppContainer.user_storage_manager],
-        handler_scripts: Scripts = Provide[AppContainer.handler_scripts]
+        handler_scripts: IScripts = Provide[AppContainer.handler_scripts]
 ) -> None:
+    print(msg.from_user.language_code)
+    handler_scripts.set_language(msg.from_user.language_code)
     try:
         await user_storage_manager.create_user(
             User(
@@ -38,6 +40,6 @@ async def start(
         ...
     finally:
         await msg.answer(
-            text=handler_scripts.start_script,
+            text=handler_scripts.start_script(),
             reply_markup=main_menu_kb().as_markup()
         )
