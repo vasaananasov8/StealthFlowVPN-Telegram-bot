@@ -28,4 +28,8 @@ class ConnectionManager(IConnectionManager):
         return
 
     async def get_all_user_active_connection_links(self, user_id: int) -> list[str] | None:
-        pass
+        connections = await self.connection_repository.get_all_user_connections(user_id)
+        result = []
+        for con in connections:
+            result.append(con["link"])
+        return result

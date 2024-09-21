@@ -37,6 +37,7 @@ async def user_stats(
 
 
 @router.callback_query(lambda x: x.data == callbacks.CHECK_ACTIVE_CONNECTION_LINKS)
+@inject
 async def user_stats_check_active_links(
         callback: types.CallbackQuery,
         connection_manager: IConnectionManager = Provide[AppContainer.connection_manager],
