@@ -6,6 +6,7 @@ from dependency_injector import containers, providers
 from src.bot.bot import TgBot
 from src.bot.ui.scripts import Scripts
 from src.config.config import Config
+from src.services.storage.infrastructure.implementation.connection_manager import ConnectionManager
 from src.services.storage.infrastructure.implementation.pormo_manager import PromoManager
 from src.services.storage.infrastructure.implementation.subscription_storage_manager import SubscriptionStorageManager
 from src.services.storage.infrastructure.implementation.user_storage_manager import UserStorageManager
@@ -92,8 +93,14 @@ class AppContainer(containers.DeclarativeContainer):
         promo_repository=promo_repository
     )
 
+    connection_manager = providers.Singleton(
+        ConnectionManager,
+        connection_repository=connection_repository
+    )
+
     vpn_manager = providers.Singleton(
         VpnManager,
         subscription_manager=subscription_storage_manager,
-        vpn_repository=vpn_repository
+        vpn_repository=vpn_repository,
+        connection_manager=connection_manager
     )
