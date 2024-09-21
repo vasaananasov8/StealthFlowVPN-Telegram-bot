@@ -5,6 +5,7 @@ from typing import Any, NamedTuple
 
 from src.core.models.promo import Promo
 from src.core.models.subscription import Subscription
+from src.services.storage.infrastructure.interfaces.i_connection_manager import IConnectionManager
 from src.services.storage.infrastructure.interfaces.i_promo_manager import IPromoManager
 from src.services.storage.infrastructure.interfaces.i_subscription_manager import ISubscriptionStorageManager
 from src.services.vpn.i_vpn_repository import IVpnRepository
@@ -25,10 +26,12 @@ class ApplyPromoResult(NamedTuple):
 class IVpnManager(ABC):
     def __init__(
             self, vpn_repository: IVpnRepository,
-            subscription_manager: ISubscriptionStorageManager
+            subscription_manager: ISubscriptionStorageManager,
+            connection_manager: IConnectionManager
     ) -> None:
         self._vpn_repository = vpn_repository
         self._subscription_manager = subscription_manager
+        self._connection_manager = connection_manager
 
     @staticmethod
     def create_user_email_for_vpn(user_id: int, username: str, connection_number: int) -> str:
