@@ -2,11 +2,9 @@ import logging
 from typing import Any
 
 from sqlalchemy import update
-from sqlalchemy.exc import SQLAlchemyError, NoResultFound
 from sqlalchemy.future import select
 
-from src.services.storage.repository.exceptions import RepositorySubscriptionCreationError, RepositoryException, \
-    RepositorySubscriptionNotFound, handle_db_exception
+from src.services.storage.repository.exceptions import async_method_arguments_logger
 from src.services.storage.repository.interfaces.i_subscription_repository import IPostgresSubscriptionRepository
 from src.services.storage.schemas.subscription import Subscription
 
@@ -14,7 +12,7 @@ logger = logging.getLogger(__name__)
 
 
 class PostgresSubscriptionRepository(IPostgresSubscriptionRepository):
-    @handle_db_exception(exception_mapping={'subscription': RepositorySubscriptionNotFound})
+    @async_method_arguments_logger(logger)
     # Возможно возращать он должен не дикт а лист
     async def get_user_subscription(self, user_id: int) -> dict[str, Any]:
         async with self.async_session() as session:
@@ -34,13 +32,13 @@ class PostgresSubscriptionRepository(IPostgresSubscriptionRepository):
                     'is_active': subscription.is_active
                 }
 
-    @handle_db_exception(exception_mapping={'subscription': RepositorySubscriptionCreationError})
+    @async_method_arguments_logger(logger)
     async def create_subscription(self, subscription: Subscription) -> None:
         async with self.async_session() as session:
             async with session.begin():
                 session.add(subscription)
 
-    @handle_db_exception(exception_mapping={'subscription': RepositorySubscriptionNotFound})
+    @async_method_arguments_logger(logger)
     async def update_subscription(self, subscription_id: int, update_fields: dict) -> dict:
         async with self.async_session() as session:
             async with session.begin():
