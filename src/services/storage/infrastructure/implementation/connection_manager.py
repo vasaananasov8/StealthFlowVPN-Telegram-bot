@@ -26,3 +26,6 @@ class ConnectionManager(IConnectionManager):
             connection.get_db_connection_model()
         )
         return
+
+    async def get_all_user_active_connection_links(self, user_id: int) -> list[str] | None:
+        pass

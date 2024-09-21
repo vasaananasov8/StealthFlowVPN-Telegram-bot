@@ -15,3 +15,7 @@ class IConnectionManager(ABC):
     @abstractmethod
     async def add_new_connection(self, connection: Connection) -> None:
         ...
+
+    @abstractmethod
+    async def get_all_user_active_connection_links(self, user_id: int) -> list[str] | None:
+        ...
