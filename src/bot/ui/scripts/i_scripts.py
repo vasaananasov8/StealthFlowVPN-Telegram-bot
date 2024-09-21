@@ -37,6 +37,10 @@ class IScripts(ABC):
         ...
 
     @abstractmethod
+    def get_vpn(self) -> str:
+        ...
+
+    @abstractmethod
     def connection_link(self, connection_link: str) -> str:
         ...
 

@@ -11,6 +11,10 @@ class Scripts(IScripts):
         self._check_is_langcode_set()
         return self._script_storage["start"]
 
+    def get_vpn(self) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["get_vpn"]
+
     def connection_link(self, connection_link: str) -> str:
         self._check_is_langcode_set()
         return self._script_storage["connection_link"].format(connection_link)
