@@ -4,7 +4,7 @@ from aiogram.enums import ParseMode
 from dependency_injector import containers, providers
 
 from src.bot.bot import TgBot
-from src.bot.ui.scripts import Scripts
+from src.bot.ui.scripts.scripts import Scripts
 from src.config.config import Config
 from src.services.storage.infrastructure.implementation.connection_manager import ConnectionManager
 from src.services.storage.infrastructure.implementation.pormo_manager import PromoManager
