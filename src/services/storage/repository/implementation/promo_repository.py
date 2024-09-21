@@ -1,7 +1,7 @@
-import logging
 import uuid
 from typing import Any
 
+from sqlalchemy import delete
 from sqlalchemy.future import select
 
 from src.services.storage.repository.exceptions import RepositoryPromoNotFound, handle_db_exception
@@ -54,3 +54,13 @@ class PostgresPromoRepository(IPostgresPromoRepository):
 
     async def change_promo_activity(self, _id: str, new_value: bool) -> None:
         ...
+
+    @handle_db_exception(exception_mapping={'promo': RepositoryPromoNotFound})
+    async def delete_promo(self, _id: str) -> None:
+        async with self.async_session() as session:
+            async with session.begin():
+                await session.execute(
+                    delete(Promo).where(Promo.id == _id)
+                )
+
+
