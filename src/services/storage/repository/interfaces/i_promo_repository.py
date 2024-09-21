@@ -23,6 +23,11 @@ class IPromoRepository(ABC):
     async def change_promo_activity(self, _id: str, new_value: bool) -> None:
         ...
 
+    @abstractmethod
+    async def delete_promo(self, _id: str) -> None:
+        ...
+
+
 class IPostgresPromoRepository(IPostgresInit, IPromoRepository, ABC):
     """
     Interface to interact with postgres promos table
