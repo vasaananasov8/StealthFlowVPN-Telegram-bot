@@ -35,10 +35,18 @@ class IVpnManager(ABC):
 
     @staticmethod
     def create_user_email_for_vpn(user_id: int, username: str, connection_number: int) -> str:
+        """
+        Create user email string for vpn backend
+        :return: string with format: "username_user_id_connection_number"
+        """
         return f"{username}_{user_id}_{connection_number}"
 
     @abstractmethod
     async def create_connection(self) -> str:
+        """
+        Crate new vpn client
+        :return:
+        """
         ...
 
     @abstractmethod
@@ -46,10 +54,18 @@ class IVpnManager(ABC):
             self, subscription: Subscription,
             user_id: str, username: str, connection_number: int
     ) -> str:
+        """
+        Create new subscription in database -> create connection in database -> create link
+        :return: connection link
+        """
         ...
 
     @abstractmethod
     async def extend_subscription(self) -> bool:
+        """
+        Extend user subscription
+        :return: extend success flag
+        """
         ...
 
     @abstractmethod
