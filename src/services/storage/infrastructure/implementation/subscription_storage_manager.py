@@ -1,6 +1,6 @@
+import logging
 from datetime import datetime
 
-from charset_normalizer.md import getLogger
 from pydantic import ValidationError
 
 from src.core.models.subscription import Subscription
@@ -8,7 +8,8 @@ from src.services.storage.exception import StorageManagerValidationError
 from src.services.storage.infrastructure.interfaces.i_subscription_manager import ISubscriptionStorageManager
 from src.services.storage.repository.exceptions import RepositorySubscriptionNotFound
 
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
+
 
 class SubscriptionStorageManager(ISubscriptionStorageManager):
 

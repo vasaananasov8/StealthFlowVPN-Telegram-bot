@@ -1,4 +1,5 @@
-from charset_normalizer.md import getLogger
+import logging
+
 from pydantic import ValidationError
 
 from src.core.models.user import User
@@ -6,7 +7,7 @@ from src.services.storage.exception import StorageManagerValidationError
 from src.services.storage.infrastructure.interfaces.i_user_storage_manager import IUserStorageManager
 from src.services.storage.repository.exceptions import RepositoryException
 
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class UserStorageManager(IUserStorageManager):

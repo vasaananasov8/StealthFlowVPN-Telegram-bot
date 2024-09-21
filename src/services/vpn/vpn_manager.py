@@ -1,8 +1,7 @@
+import logging
 import uuid
 from datetime import datetime
 from typing import Any
-
-from charset_normalizer.md import getLogger
 
 from src.core.models.connection import Connection
 from src.core.models.promo import Promo
@@ -12,7 +11,7 @@ from src.services.vpn.exceptions import ApplyPromoException
 from src.services.vpn.i_vpn_manager import IVpnManager, ApplyPromoResult, ApplyPromoResultValues
 from src.utils import dt_utils
 
-logger = getLogger(__name__)
+logger = logging.getLogger(__name__)
 
 
 class VpnManager(IVpnManager):
@@ -112,4 +111,3 @@ class VpnManager(IVpnManager):
             return result
         else:
             logger.error("Failed changer promo activity")
-
