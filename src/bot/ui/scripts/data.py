@@ -17,5 +17,16 @@ SCRIPT_RU: Final[dict[str, str]] = {
 
     "stats_active_connection_links": "Ваши ключи для подключения:\n",
 
-    "get_vpn": "Скрипт на получение впн"
+    "get_vpn": "Скрипт на получение впн",
+
+    "support": "Опишите вашу проблему в одном сообщении и приложите скриншоты по необходимости",
+
+    "support_register_appeal": "Ваша обращение успешно переданно",
+
+    "support_problem": "Обращение от\n"
+                       "id: {}\n"
+                       "username: {}\n"
+                       "name: {} {}\n"
+                       "lang_code: {}\n\n"
+                       "{}"
 }
