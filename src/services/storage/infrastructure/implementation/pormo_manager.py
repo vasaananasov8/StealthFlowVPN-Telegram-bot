@@ -1,3 +1,5 @@
+import uuid
+
 from src.core.models.promo import Promo
 from src.services.storage.infrastructure.exceptions import PromoInvalidId
 from src.services.storage.infrastructure.interfaces.i_promo_manager import IPromoManager, PromoCheckResult, \
@@ -39,3 +41,6 @@ class PromoManager(IPromoManager):
             return PromoCheckResult(result=PromoCheckValue.PROMO_ALREADY_ACTIVE)
         else:
             return PromoCheckResult(result=PromoCheckValue.VALID, promo=promo)
+
+    async def delete_promo(self, promo_id: uuid.UUID) -> None:
+        pass

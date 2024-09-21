@@ -58,3 +58,7 @@ class IPromoManager(ABC):
     @abstractmethod
     async def check_promo_is_valid(self, promo_id) -> PromoCheckResult:
         ...
+
+    @abstractmethod
+    async def delete_promo(self, promo_id: uuid.UUID) -> None:
+        ...

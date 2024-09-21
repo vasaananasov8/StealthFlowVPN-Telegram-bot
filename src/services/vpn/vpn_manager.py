@@ -108,8 +108,7 @@ class VpnManager(IVpnManager):
                 logger.error("Can't apply promo: update subscription failed")
                 raise ApplyPromoException("Can't apply promo: update subscription failed")
 
-        if await promo_manager.change_promo_activity(promo.id, True):
+        if await promo_manager.delete_promo(promo.id):
             return result
         else:
             logger.error("Failed changer promo activity")
-
