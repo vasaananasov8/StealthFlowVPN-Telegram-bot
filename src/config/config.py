@@ -29,6 +29,8 @@ class Config:
         self._VPN_PBK: Final[str] = self.get_env_var("VPN_PBK")
         self._VPN_SID: Final[str] = self.get_env_var("VPN_SID")
 
+        self._SUPPORT_TELEGRAM_CHANNEL_ID: Final[int] = self.get_env_var("SUPPORT_TELEGRAM_CHANNEL_ID")
+
     @staticmethod
     def get_env_var(var_name: str, default_value: Any = None) -> Any:
         value: str | None = os.getenv(var_name)
@@ -68,3 +70,7 @@ class Config:
     @property
     def vpn_sid(self) -> str:
         return self._VPN_SID
+
+    @property
+    def support_chanel_id(self) -> int:
+        return self._SUPPORT_TELEGRAM_CHANNEL_ID
