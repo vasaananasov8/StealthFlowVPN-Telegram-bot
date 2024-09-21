@@ -6,7 +6,7 @@ from src.services.storage.infrastructure.interfaces.i_promo_manager import IProm
 
 class PromoManager(IPromoManager):
 
-    async def get_promo(self, _id: str) -> Promo:
+    async def get_promo(self, _id: str) -> Promo | None:
         """
         :raise: PromoInvalidId - if invalid id
         """
