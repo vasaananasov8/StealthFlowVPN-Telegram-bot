@@ -8,7 +8,6 @@ from src.services.storage.repository.exceptions import RepositoryConnectionCreat
     RepositoryUserNotFound, handle_db_exception
 from src.services.storage.repository.interfaces.i_connection_repository import IPostgresConnectionRepository
 from src.services.storage.schemas.connection import Connection
-from src.services.storage.schemas.payment import Payment
 
 logger = logging.getLogger(__name__)
 

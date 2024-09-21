@@ -49,3 +49,8 @@ class PostgresPromoRepository(IPostgresPromoRepository):
         async with self.async_session() as session:
             async with session.begin():
                 session.add_all(promos)
+
+        ...
+
+    async def change_promo_activity(self, _id: str, new_value: bool) -> None:
+        ...

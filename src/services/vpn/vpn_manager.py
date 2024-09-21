@@ -1,93 +1,113 @@
-import json
 import uuid
-
 from datetime import datetime
 from typing import Any
 
-from dateutil.relativedelta import relativedelta
+from charset_normalizer.md import getLogger
 
-from src.services.vpn.exceptions import CreateVpnClientException
-from src.services.vpn.i_vpn_manager import IVpnManager
-from src.services.vpn.requests import statuses
-from src.services.vpn.requests.request_handler import RequestHandler
+from src.core.models.connection import Connection
+from src.core.models.promo import Promo
+from src.core.models.subscription import Subscription
+from src.services.storage.infrastructure.interfaces.i_promo_manager import IPromoManager
+from src.services.vpn.exceptions import ApplyPromoException
+from src.services.vpn.i_vpn_manager import IVpnManager, ApplyPromoResult, ApplyPromoResultValues
+from src.utils import dt_utils
+
+logger = getLogger(__name__)
 
 
 class VpnManager(IVpnManager):
+    async def create_connection(self) -> str:
+        pass
 
-    async def add_client(
-            self,
-            connection_id: uuid.UUID,
-            user_email: str,
-            inbound_id: int = 1,
-            total_gb: int = 0,
-            duration_mouth: int = 1
-    ) -> None:
-        expiry_time = datetime.now() + relativedelta(months=1)
-        expiry_time = int(expiry_time.timestamp() * 1000)
+    async def update_subscription(self, sub_id: int, new_data: dict[str, Any]) -> bool:
+        pass
 
-        r = await self.request_handler.post(
-            url=f"panel/api/inbounds/addClient",
-            body=self.create_add_client_body(connection_id, user_email, expiry_time, inbound_id, total_gb)
-        )
-        if r.status != statuses.SUCCESS_200:
-            raise CreateVpnClientException(f"Create client failed, response: {r}")
-        r_body = json.loads(r.body)
-        if not r_body.get("success", False):
-            raise CreateVpnClientException(f"Create client failed, response: {r}")
-
-    async def add_client_with_connection_string(
-            self,
-            connection_id: uuid.UUID,
-            user_email: str,
-            inbound_id: int = 1,
-            total_gb: int = 0,
-            duration_mouth: int = 1
-    ) -> str | None:
-        """Create client with 3x api and return connection string to created connection"""
-        await self.add_client(connection_id, user_email, inbound_id, total_gb, duration_mouth)
-        x = self.create_connection_link(connection_id, user_email)
-        print(x)
-        return x
-
-    @staticmethod
-    def create_add_client_body(
-            connection_id: uuid.UUID,
-            user_email: str,
-            expiry_time: int,
-            inbound_id: int = 1,
-            total_gb: int = 0,
-    ) -> dict[str, Any]:
-        return {
-            "id": inbound_id,
-            "settings": json.dumps({
-                "clients":
-                    [
-                        {
-                            "id": str(connection_id),
-                            "flow": "xtls-rprx-vision",
-                            "email": user_email,
-                            "limitIp": 0,
-                            "totalGB": total_gb,
-                            "expiryTime": expiry_time,
-                            "enable": True,
-                            "tgId": "",
-                            "subId": "",
-                            "reset": 0
-                        }
-                    ]
-            })
-        }
-
-    def create_connection_link(
-            self,
-            connection_id: uuid.UUID,
-            user_email: str
+    async def create_new_subscription(
+            self, subscription: Subscription,
+            user_id: int, username: str, connection_number: int
     ) -> str:
-        return (f"vless://{connection_id}@{self.config.vpn_host}:433?"
-                f"type=tcp&"
-                f"security=reality&"
-                f"pbk={self.config.vpn_pbk}&"
-                f"fp=chrome&sni=google.com&"
-                f"sid={self.config.vpn_sid}&"
-                f"spx=%2F&flow=xtls-rprx-vision"
-                f"#{user_email}")
+        connection_id = uuid.uuid4()
+        await self._subscription_manager.create_subscription(subscription)
+        await self._connection_manager.add_new_connection(
+            Connection(
+                id=connection_id,
+                user_id=user_id
+            )
+        )
+        return await self._vpn_repository.add_client_with_connection_string(
+            connection_id=connection_id,
+            user_email=self.create_user_email_for_vpn(user_id, username, connection_number)
+        )
+
+    async def extend_subscription(self) -> bool:
+        pass
+
+    async def apply_promo(
+            self, promo: Promo,
+            user_id: int,
+            username: str,
+            promo_manager: IPromoManager
+    ) -> ApplyPromoResult:
+        user_sub = await self._subscription_manager.get_user_subscription(user_id)
+        if user_sub is None:
+            # if first user sub
+            new_until = dt_utils.add_mount(datetime.now(), promo.duration)
+            user_sub = Subscription(
+                id=None,
+                user_id=user_id,
+                last_payment=None,
+                sale=100,
+                until=new_until,
+                active_links=1,
+                is_active=True,
+            )
+            connection_link = await self.create_new_subscription(
+                subscription=user_sub,
+                user_id=user_id,
+                username=username,
+                connection_number=1
+            )
+            result = ApplyPromoResult(
+                result=ApplyPromoResultValues.CREATE_NEW,
+                connection_link=connection_link,
+                new_until=new_until
+            )
+        elif user_sub.is_active:
+            # If user already has active sub
+            old_until = user_sub.until
+            new_until = dt_utils.add_mount(old_until, promo.duration)
+            if await self.extend_subscription():  # TODO in STEAL-17
+                result = ApplyPromoResult(
+                    result=ApplyPromoResultValues.EXTEND_ACTIVE,
+                    new_until=new_until,
+                    old_until=old_until
+                )
+            else:
+                raise ApplyPromoException(f"Can't apply promo")  # TODO need more details message
+        else:
+            # if user already has sub, but it not activ
+            new_until = dt_utils.add_mount(datetime.now(), promo.duration)
+            if await self.update_subscription(
+                    user_sub.id,
+                    {
+                        "last_payment": None,
+                        "until": new_until,
+                        "is_active": True,
+                        "active_links": 1
+                    }
+            ):
+                connection_link = await self.create_connection()
+                result = ApplyPromoResult(
+                    result=ApplyPromoResultValues.EXTEND_NON_ACTIVE,
+                    connection_link=connection_link,
+                    new_until=new_until
+                )
+            else:
+                logger.error("Can't apply promo: update subscription failed")
+                raise ApplyPromoException("Can't apply promo: update subscription failed")
+
+        if await promo_manager.change_promo_activity(promo.id, True):
+            return result
+        else:
+            logger.error("Failed changer promo activity")
+

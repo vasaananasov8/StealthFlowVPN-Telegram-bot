@@ -1,42 +1,81 @@
-import uuid
 from abc import ABC, abstractmethod
+from datetime import datetime
+from enum import Enum
+from typing import Any, NamedTuple
 
-from src.config.config import Config
-from src.services.vpn.requests.request_handler import RequestHandler
+from src.core.models.promo import Promo
+from src.core.models.subscription import Subscription
+from src.services.storage.infrastructure.interfaces.i_connection_manager import IConnectionManager
+from src.services.storage.infrastructure.interfaces.i_promo_manager import IPromoManager
+from src.services.storage.infrastructure.interfaces.i_subscription_manager import ISubscriptionStorageManager
+from src.services.vpn.i_vpn_repository import IVpnRepository
+
+
+class ApplyPromoResultValues(Enum):
+    CREATE_NEW = 1
+    EXTEND_ACTIVE = 2
+    EXTEND_NON_ACTIVE = 3
+
+class ApplyPromoResult(NamedTuple):
+    result: ApplyPromoResultValues
+    connection_link: str | None = None
+    old_until: datetime | None = None
+    new_until: datetime | None = None
 
 
 class IVpnManager(ABC):
-    def __init__(self, request_handler: RequestHandler, config: Config) -> None:
-        self.request_handler = request_handler
-        self.config = config
+    def __init__(
+            self, vpn_repository: IVpnRepository,
+            subscription_manager: ISubscriptionStorageManager,
+            connection_manager: IConnectionManager
+    ) -> None:
+        self._vpn_repository = vpn_repository
+        self._subscription_manager = subscription_manager
+        self._connection_manager = connection_manager
+
+    @staticmethod
+    def create_user_email_for_vpn(user_id: int, username: str, connection_number: int) -> str:
+        """
+        Create user email string for vpn backend
+        :return: string with format: "username_user_id_connection_number"
+        """
+        return f"{username}_{user_id}_{connection_number}"
 
     @abstractmethod
-    async def add_client(
-            self,
-            user_email: str,
-            connection_id: uuid.UUID,
-            inbound_id: int = 1,
-            total_gb: int = 0,
-            duration_mouth: int = 1
-    ) -> None:
+    async def create_connection(self) -> str:
         """
-        Create new client connection in 3x service
-        :param user_email: some unic str to indelicate client connection
-        :param connection_id: uuid of current connection
-        :param inbound_id:
-        :param total_gb: gb limit of connection
-        :param duration_mouth:
-        :raise: CreateVpnClientException if client not created
+        Crate new vpn client
+        :return:
         """
         ...
 
     @abstractmethod
-    async def add_client_with_connection_string(
-            self,
-            connection_id: uuid.UUID,
-            user_email: str,
-            inbound_id: int = 1,
-            total_gb: int = 0,
-            duration_mouth: int = 1
-    ) -> str | None:
+    async def create_new_subscription(
+            self, subscription: Subscription,
+            user_id: str, username: str, connection_number: int
+    ) -> str:
+        """
+        Create new subscription in database -> create connection in database -> create link
+        :return: connection link
+        """
+        ...
+
+    @abstractmethod
+    async def extend_subscription(self) -> bool:
+        """
+        Extend user subscription
+        :return: extend success flag
+        """
+        ...
+
+    @abstractmethod
+    async def update_subscription(self, sub_id: int, new_data: dict[str, Any]) -> bool:
+        ...
+
+    @abstractmethod
+    async def apply_promo(
+            self, promo: Promo,
+            user_id: int, username: str,
+            promo_manager: IPromoManager
+    ) -> ApplyPromoResult:
         ...
