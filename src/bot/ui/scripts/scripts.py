@@ -39,5 +39,5 @@ class Scripts(IScripts):
     def stats_active_connection_links(self, connection_links: list[str]) -> str:
         script = self._script_storage["stats_active_connection_links"]
         for link in connection_links:
-            script += f"\n- <code>{link}</code>"
+            script += f"\n\n- <code>{link}</code>"
         return script
