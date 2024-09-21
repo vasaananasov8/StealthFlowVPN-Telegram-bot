@@ -7,6 +7,29 @@ from src.core.models.subscription import Subscription
 
 class Scripts(IScripts):
 
+    # Support scripts
+    def support(self) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["support"]
+
+    def support_register_appeal(self) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["support_register_appeal"]
+
+    def support_problem(
+            self, user_id: int,
+            username: str,
+            first_name: str,
+            last_name: str,
+            lang_code: str,
+            text: str
+    ) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["support_problem"].format(
+            user_id, username, first_name, last_name, lang_code, text
+        )
+
+    #
     def start_script(self) -> str:
         self._check_is_langcode_set()
         return self._script_storage["start"]
