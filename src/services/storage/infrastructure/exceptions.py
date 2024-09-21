@@ -3,3 +3,6 @@ class ManagerException(Exception):
 
 class PromoInvalidId(ManagerException):
     ...
+
+class DbDataValidationError(ManagerException):
+    ...
