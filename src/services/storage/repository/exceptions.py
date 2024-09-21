@@ -1,5 +1,8 @@
-import logging
 import uuid
+
+from logging import Logger
+from functools import wraps
+from typing import Callable, Any
 from functools import wraps
 
 from sqlalchemy.exc import NoResultFound, SQLAlchemyError
@@ -61,34 +64,15 @@ class RepositoryPromoNotFound(RepositoryException):
         super().__init__(f'Promo with ID {self.promo_id} not found.')
 
 
-logger = logging.getLogger(__name__)
+def async_method_arguments_logger(logger: Logger) -> Callable:
+    def decorator(method: Callable) -> Callable:
+        @wraps(method)
+        async def wrapper(*args: tuple[Any, ...], **kwargs: dict[str, Any]) -> Any:
+            logger.info(f"Statr handler: {method.__name__} | With arguments: {args}, {kwargs}")
+            result = await method(*args, **kwargs)
+            logger.info(f"Finish handler: {method.__name__} | With result: {result}")
+            return result
 
-
-def handle_db_exception(exception_mapping):
-    def decorator(func):
-        @wraps(func)
-        async def wrapper(*args, **kwargs):
-            try:
-                return await func(*args, **kwargs)
-            except NoResultFound:
-                exception_key = func.__name__.split('_')[-1]
-                custom_exception = exception_mapping.get(exception_key, RepositoryException)
-
-                entity_id = kwargs.get('_id') or kwargs.get('user_id') or kwargs.get('subscription_id') or args[1]
-
-                logger.info(f'No result found for {exception_key} with ID: {entity_id}.')
-                raise custom_exception(entity_id)
-            except SQLAlchemyError as e:
-                logger.error(f'SQLAlchemy error in {func.__name__}: {e}')
-                if 'create' in func.__name__:
-                    custom_exception = exception_mapping.get('create', RepositoryException)
-                    entity = kwargs.get('user') or kwargs.get('subscription') or args[1]
-                    raise custom_exception(f'Error occurred while creating entity with ID {entity.id}: {e}')
-                elif 'update' in func.__name__:
-                    custom_exception = exception_mapping.get('update', RepositoryException)
-                    entity_id = kwargs.get('subscription_id') or kwargs.get('user_id') or args[1]
-                    raise custom_exception(f'Error occurred while updating entity with ID {entity_id}: {e}')
-                else:
-                    raise RepositoryException(f'SQLAlchemy error in {func.__name__}: {e}')
         return wrapper
+
     return decorator
