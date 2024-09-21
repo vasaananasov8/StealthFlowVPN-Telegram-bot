@@ -23,5 +23,5 @@ def cancel() -> InlineKeyboardBuilder:
 def stats_has_not_active_subscription_kb() -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Продлить подписку", callback_data=callbacks.GET_VPN)
-    builder.button(text="Посмотреть ключи подключений", callbacks=callbacks.CHECK_ACTIVE_CONNECTION_LINKS)
+    builder.button(text="Посмотреть ключи подключений", callback_data=callbacks.CHECK_ACTIVE_CONNECTION_LINKS)
     return builder

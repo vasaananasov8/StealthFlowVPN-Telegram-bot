@@ -14,7 +14,7 @@ logger = getLogger(__name__)
 router = Router(name=__name__)
 
 
-@router.callback_query(lambda x: x.data == callbacks.USER_STATS)
+@router.callback_query(lambda x: x.data == callbacks.GET_USER_STATS)
 @inject
 async def user_stats(
         callback: types.CallbackQuery,
