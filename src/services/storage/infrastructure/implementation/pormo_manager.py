@@ -18,7 +18,7 @@ class PromoManager(IPromoManager):
     async def get_all_active_promos(self) -> list[Promo]:
         pass
 
-    async def create_promos(self, promo_nums: int) -> list[str]:
+    async def create_promos(self, promo_nums: int, promo_month_duration: int) -> list[str]:
         pass
 
     async def change_promo_activity(self, _id: str, new_value: bool) -> bool:

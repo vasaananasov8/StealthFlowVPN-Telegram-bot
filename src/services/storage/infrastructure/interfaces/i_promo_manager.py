@@ -48,7 +48,7 @@ class IPromoManager(ABC):
         ...
 
     @abstractmethod
-    async def create_promos(self, promo_nums: int) -> list[str]:
+    async def create_promos(self, promo_nums: int, promo_month_duration: int) -> list[str]:
         ...
 
     @abstractmethod
