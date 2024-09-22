@@ -7,9 +7,36 @@ from src.core.models.subscription import Subscription
 
 class Scripts(IScripts):
 
+    # Support scripts
+    def support(self) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["support"]
+
+    def support_register_appeal(self) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["support_register_appeal"]
+
+    def support_problem(
+            self, user_id: int,
+            username: str,
+            first_name: str,
+            last_name: str,
+            lang_code: str,
+            text: str
+    ) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["support_problem"].format(
+            user_id, username, first_name, last_name, lang_code, text
+        )
+
+    #
     def start_script(self) -> str:
         self._check_is_langcode_set()
         return self._script_storage["start"]
+
+    def get_vpn(self) -> str:
+        self._check_is_langcode_set()
+        return self._script_storage["get_vpn"]
 
     def connection_link(self, connection_link: str) -> str:
         self._check_is_langcode_set()
@@ -39,5 +66,5 @@ class Scripts(IScripts):
     def stats_active_connection_links(self, connection_links: list[str]) -> str:
         script = self._script_storage["stats_active_connection_links"]
         for link in connection_links:
-            script += f"\n- <code>{link}</code>"
+            script += f"\n\n- <code>{link}</code>"
         return script

@@ -22,10 +22,15 @@ router = Router(name=__name__)
 @inject
 async def get_vpn(
         callback: types.CallbackQuery | None = None,
+        scripts_handler: Scripts = Provide[AppContainer.handler_scripts]
 ) -> None:
     """Open menu to get vpn. Now 2 options: 'Pay for vpn', 'Use promo'"""
+    scripts_handler.set_language(callback.from_user.language_code)
     kb = keyboard.get_vpm_meny()
-    await callback.message.answer(text="stub", reply_markup=kb.as_markup())
+    await callback.message.answer(
+        text=scripts_handler.get_vpn(),
+        reply_markup=kb.as_markup()
+    )
     return
 
 

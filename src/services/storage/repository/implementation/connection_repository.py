@@ -18,12 +18,14 @@ class PostgresConnectionRepository(IPostgresConnectionRepository):
             query = select(Connection).filter(Connection.user_id == user_id)
             result = await session.execute(query)
             connections = result.scalars().all()
-
             connections_list = [
-                connection.id
+                {
+                "id": connection.id,
+                "user_id": connection.user_id,
+                "link": connection.link
+                }
                 for connection in connections
             ]
-
             return connections_list
 
     @async_method_arguments_logger(logger)

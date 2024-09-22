@@ -37,6 +37,29 @@ class IScripts(ABC):
         ...
 
     @abstractmethod
+    def get_vpn(self) -> str:
+        ...
+
+    @abstractmethod
+    def support(self) -> str:
+        ...
+
+    @abstractmethod
+    def support_register_appeal(self) -> str:
+        ...
+
+    @abstractmethod
+    def support_problem(
+            self, user_id: int,
+            username: str,
+            first_name: str,
+            last_name: str,
+            lang_code: str,
+            text: str
+    ) -> str:
+        ...
+
+    @abstractmethod
     def connection_link(self, connection_link: str) -> str:
         ...
 

@@ -23,7 +23,7 @@ async def start(
         user_storage_manager: IUserStorageManager = Provide[AppContainer.user_storage_manager],
         handler_scripts: IScripts = Provide[AppContainer.handler_scripts]
 ) -> None:
-    print(msg.from_user.language_code)
+    """Start command handler"""
     handler_scripts.set_language(msg.from_user.language_code)
     try:
         await user_storage_manager.create_user(

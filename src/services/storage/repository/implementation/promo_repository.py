@@ -58,6 +58,7 @@ class PostgresPromoRepository(IPostgresPromoRepository):
     async def change_promo_activity(self, _id: str, new_value: bool) -> None:
         ...
 
+
     @async_method_arguments_logger(logger)
     async def delete_promo(self, _id: str) -> None:
         async with self.async_session() as session:
@@ -65,3 +66,4 @@ class PostgresPromoRepository(IPostgresPromoRepository):
                 await session.execute(
                     delete(Promo).where(Promo.id == _id)
                 )
+
