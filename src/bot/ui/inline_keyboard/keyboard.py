@@ -32,3 +32,9 @@ def answer_support_msg(user_id: int) -> InlineKeyboardBuilder:
     builder = InlineKeyboardBuilder()
     builder.button(text="Ответить по обращению", callback_data=answer_support_msg_callback(user_id))
     return builder
+
+
+def accept_kb() -> InlineKeyboardBuilder:
+    builder = InlineKeyboardBuilder()
+    builder.button(text="Подтвердить", callback_data=callbacks.ACCEPT)
+    return builder

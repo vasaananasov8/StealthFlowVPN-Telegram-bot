@@ -11,6 +11,7 @@ USER_PROMO: Final[str] = "USER_PROMO"
 USER_STATS: Final[str] = "USER_STATS"
 CHECK_ACTIVE_CONNECTION_LINKS: Final[str] = "CHECK_ACTIVE_CONNECTION_LINKS"
 ANSWER_SUPPORT_MSG: Final[str] = "ANSWER_SUPPORT_MSG"
+ACCEPT: Final[str] = "ACCEPT"
 
 def get_user_id_from_callback_data(callback_data: str) -> int:
     return int(callback_data.split("_")[-1])
