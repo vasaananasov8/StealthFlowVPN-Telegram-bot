@@ -7,6 +7,7 @@ from src.services.storage.schemas.connection import Connection
 
 class IConnectionRepository(ABC):
     """Interface to interact with connectin database"""
+
     @abstractmethod
     async def get_all_user_connections(self, user_id: int) -> list[dict[str, Any]]:
         """
@@ -21,6 +22,14 @@ class IConnectionRepository(ABC):
     async def create_connection(self, connection: Connection) -> None:
         """
         :param connection:  connection
+        :return: None
+        :raise: RepositoryException
+        """
+        ...
+
+    async def delete_connection(self, connection_id: int) -> None:
+        """
+        :param connection_id:  connection
         :return: None
         :raise: RepositoryException
         """

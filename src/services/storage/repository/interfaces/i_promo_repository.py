@@ -27,6 +27,7 @@ class IPromoRepository(ABC):
     async def delete_promo(self, _id: str) -> None:
         ...
 
+
 class IPostgresPromoRepository(IPostgresInit, IPromoRepository, ABC):
     """
     Interface to interact with postgres promos table
