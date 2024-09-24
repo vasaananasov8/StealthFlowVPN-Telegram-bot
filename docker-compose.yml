@@ -1,7 +1,26 @@
 version: "3.7"
 services:
+  bot:
+    build: .
+    container_name: vpn-bot
+    depends_on:
+      - postgres
+    environment:
+      - DB_HOST=postgres
+      - DB_PORT=5432
+      - DB_USER=${DB_USER}
+      - DB_PASSWORD=${DB_PASSWORD}
+      - DB_NAME=${DB_NAME}
+    env_file:
+      - .env
+    restart: always
+    volumes:
+      - .:/bot
+    command: ["python", "-m", "src.main"]
+
   postgres:
-    image: postgres
+    image: postgres:latest
+    container_name: postgres
     restart: always
     env_file:
       - .env
@@ -12,5 +31,7 @@ services:
     environment:
       - POSTGRES_USER=${DB_USER}
       - POSTGRES_PASSWORD=${DB_PASSWORD}
+      - POSTGRES_DB=${DB_NAME}
+
 volumes:
   postgres-data:
